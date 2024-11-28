@@ -2,7 +2,7 @@ import type { WsRequest, WsResponse } from '@/types/entity';
 import { utf8Decode, utf8Encode } from './textCoder';
 import { RequestApi } from '@/constant/api';
 
-type AppPlatform = 'unknow' | 'web' | 'uni' | 'wx' |'my';
+type AppPlatform = 'unknow' | 'web' | 'uni' | 'wx' |'my' | 'cocos' | 'cocos-android' | 'cocos-ios';
 
 enum WsOpenState {
   CONNECTING = 0,
@@ -34,10 +34,13 @@ class WebSocketManager {
     this.reconnectAttempts = 0;
     this.shouldReconnect = false;
     this.platformNamespace = this.checkPlatform();
+    console.log("IMSDK", this.url);
+    console.log("IMSDK", "platform is " + this.platformNamespace);
   }
 
   private checkPlatform = () => {
     if (typeof WebSocket !== 'undefined') {
+      console.info("IMSDK", "this is web")
       return 'web';
     }
     // my优先于uni 其onBinaryMessage中返回值相对于其他较为特殊 
@@ -53,7 +56,7 @@ class WebSocketManager {
     if (typeof wx !== 'undefined') {
       return 'wx';
     }
-     
+    console.error("IMSDK", "paltform is unkonwn")
     return 'unknow';
   };
 
@@ -68,10 +71,16 @@ class WebSocketManager {
             this.onReconnectSuccess();
           }
           this.reconnectAttempts = 0;
+          console.info("IMSDK", 'WebSocket connection opened');
           resolve();
         };
-        const onWsError = (event: Event) => reject(event);
+        const onWsError = (event: Event) => {
+          console.error('IMSDK WebSocket error:', JSON.stringify(event));
+          reject(event);
+        };
         if (this.platformNamespace === 'web') {
+          console.info("IMSDK", "connect by WebSocket");
+          console.info("IMSDK", "connect to " + this.url);
           this.ws = new WebSocket(this.url);
           this.ws.onopen = onWsOpen;
           this.ws.onerror = onWsError;
@@ -80,8 +89,6 @@ class WebSocketManager {
             url: this.url,
             complete: () => {},
           };
-          // @ts-ignore
-          my && (connectOptions.multiple = true)
           if (this.platformNamespace === 'uni') {
             // @ts-ignore
             this.ws = uni.connectSocket(connectOptions);
@@ -89,10 +96,6 @@ class WebSocketManager {
           if (this.platformNamespace === 'wx') {
             // @ts-ignore
             this.ws = wx.connectSocket(connectOptions);
-          }
-          if (this.platformNamespace === 'my') {
-            // @ts-ignore
-            this.ws = my.connectSocket(connectOptions);
           }
           // @ts-ignore
           this.ws.onOpen(onWsOpen);
@@ -139,17 +142,13 @@ class WebSocketManager {
     }
   };
 
-  private onBinaryMessage = async (message: string|{data:string}) => {
+  private onBinaryMessage = async (message: string) => {
     this.isProcessingMessage = true;
     // if (this.platformNamespace === 'web' && data instanceof Blob) {
     //   data = await data.arrayBuffer();
     // }
     // const message = utf8Decode(data);
-    if(typeof message !== 'string' && this.platformNamespace === 'my'){
-      message = message.data
-    }
-    const json: WsResponse = JSON.parse(message as string)
-    // const json: WsResponse = JSON.parse(message);
+    const json: WsResponse = JSON.parse(message);
     this.onMessage(json);
     if (json.event === RequestApi.Login && json.errCode === 0) {
       this.shouldReconnect = true;

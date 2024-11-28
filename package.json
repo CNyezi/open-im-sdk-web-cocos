@@ -1,7 +1,7 @@
 {
-  "name": "open-im-sdk",
-  "version": "v3.8.0-rc.2",
-  "description": "OpenIM SDK for MiniProgram",
+  "name": "open-im-sdk-for-cocos",
+  "version": "v3.8.11",
+  "description": "OpenIM SDK for js extend cocos",
   "source": "src/index.ts",
   "main": "lib/index.js",
   "unpkg": "lib/index.umd.js",
@@ -36,12 +36,12 @@
     "chat",
     "miniprogram"
   ],
-  "author": "blooming <blooming@openim.io>",
+  "author": "holtye <holtye@qq.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/openimsdk/open-im-sdk/issues"
+    "url": "https://github.com/CNyezi/open-im-sdk-web-cocos/issues"
   },
-  "homepage": "https://github.com/openimsdk/open-im-sdk#readme",
+  "homepage": "https://github.com/CNyezi/open-im-sdk-web-cocos#readme",
   "devDependencies": {
     "@types/spark-md5": "^3.0.3",
     "@typescript-eslint/parser": "^6.9.1",

@@ -13,7 +13,6 @@ import type {
   WsResponse,
   SearchedFriendsInfo,
   FullUserItem,
-  Pagination,
 } from '@/types/entity';
 
 export function setupFriend(openIMSDK: OpenIMSDK) {
@@ -47,9 +46,6 @@ export function setupFriend(openIMSDK: OpenIMSDK) {
     getFriendList: openIMSDK.createRequestFunctionWithoutParams<FullUserItem[]>(
       RequestApi.GetFriendList
     ),
-    getFriendListPage: openIMSDK.createRequestFunctionWithoutParams<
-      FullUserItem[]
-    >(RequestApi.GetFriendListPage),
     getSpecifiedFriendsInfo: openIMSDK.createRequestFunction<
       string[],
       FullUserItem[]
@@ -100,10 +96,6 @@ export interface FriendApi {
     operationID?: string
   ) => Promise<WsResponse<FriendApplicationItem[]>>;
   getFriendList: (operationID?: string) => Promise<WsResponse<FullUserItem[]>>;
-  getFriendListPage: (
-    params: Pagination,
-    operationID?: string
-  ) => Promise<WsResponse<FullUserItem[]>>;
   getSpecifiedFriendsInfo: (
     params: string[],
     operationID?: string

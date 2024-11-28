@@ -34,7 +34,6 @@ import { uuid } from '@/utils/uuid';
 const forceCloseEvents = [
   RequestApi.Logout,
   CbEvents.OnKickedOffline,
-  CbEvents.OnUserTokenInvalid,
   CbEvents.OnUserTokenExpired,
 ];
 
@@ -175,6 +174,7 @@ class OpenIMSDK
       });
     }
     const internalWsUrl = `${params.wsAddr}?sendID=${params.userID}&token=${params.token}&platformID=${params.platformID}&operationID=${operationID}`;
+    // const wsUrl = `ws://${params.wsAddr}?sendID=${encodeURIComponent(params.userID)}&token=${encodeURIComponent(token)}&platformID=${platformID}&operationID=${operationID}`;
     this.userID = params.userID;
     this.token = params.token;
     this.apiAddr = params.apiAddr;
@@ -502,7 +502,6 @@ class OpenIMSDK
   getFriendApplicationListAsApplicant!: FriendApi['getFriendApplicationListAsApplicant'];
   getFriendApplicationListAsRecipient!: FriendApi['getFriendApplicationListAsRecipient'];
   getFriendList!: FriendApi['getFriendList'];
-  getFriendListPage!: FriendApi['getFriendListPage'];
   getSpecifiedFriendsInfo!: FriendApi['getSpecifiedFriendsInfo'];
   refuseFriendApplication!: FriendApi['refuseFriendApplication'];
   removeBlack!: FriendApi['removeBlack'];
@@ -514,7 +513,6 @@ class OpenIMSDK
   joinGroup!: GroupApi['joinGroup'];
   inviteUserToGroup!: GroupApi['inviteUserToGroup'];
   getJoinedGroupList!: GroupApi['getJoinedGroupList'];
-  getJoinedGroupListPage!: GroupApi['getJoinedGroupListPage'];
   searchGroups!: GroupApi['searchGroups'];
   getSpecifiedGroupsInfo!: GroupApi['getSpecifiedGroupsInfo'];
   setGroupInfo!: GroupApi['setGroupInfo'];
